@@ -12,11 +12,6 @@ const MERCHANT_KEY = process.env.MERCHANT_KEY;
 const MERCHANT_SALT = process.env.MERCHANT_SALT;
 const FRONTEND_URL = process.env.FRONTEND;
 
-console.log("PayU URL:", PAYU_URL);
-console.log("Merchant Key:", MERCHANT_KEY);
-console.log("Merchant Salt:", MERCHANT_SALT);
-console.log("Frontend URL:", FRONTEND_URL);
-
 app.post("/api/create-payu-order", async (req, res) => {
   const {
     price,
@@ -28,8 +23,6 @@ app.post("/api/create-payu-order", async (req, res) => {
     shippingAddress,
     appliedCoupon,
   } = req.body;
-
-  console.log("Request Body:", req.body);
 
   if (
     !price ||
@@ -53,7 +46,7 @@ app.post("/api/create-payu-order", async (req, res) => {
   const hash = crypto.createHash("sha512").update(hashString).digest("hex");
 
   // PayU Success and Failure URLs
-  const successUrl = `${FRONTEND_URL}/success`;
+  const successUrl = `${FRONTEND_URL}/success?txnid=${txnid}`;
   const failureUrl = `${FRONTEND_URL}/failure`;
 
   const paymentData = {
